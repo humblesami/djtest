@@ -134,6 +134,9 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config_info['auth']['google']['secret']
 
 SOCIAL_AUTH_FACEBOOK_KEY = config_info['auth']['fb']['key']
 SOCIAL_AUTH_FACEBOOK_SECRET = config_info['auth']['fb']['secret']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id, name, email, picture'  # Request additional fields
+}
 
 # SOCIAL_AUTH_TWITTER_KEY = 'your-twitter-api-key'
 # SOCIAL_AUTH_TWITTER_SECRET = 'your-twitter-api-secret'
