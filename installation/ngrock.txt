@@ -15,3 +15,5 @@ ALLOWED_HOSTS = ['*']
 then
 ngrok http 8000
 
+
+https://developers.facebook.com/apps

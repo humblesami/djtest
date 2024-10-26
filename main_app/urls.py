@@ -1,14 +1,10 @@
-from django.urls import re_path
 from django.conf import settings
 from django.contrib import admin
 from django.views.static import serve
-
-
 from django.http import HttpResponse
 from django.urls import re_path, path, include
-from django.conf import settings
-from django.contrib import admin
-from django.views.static import serve
+from django.contrib.auth.views import LogoutView
+
 
 urls_prefix = settings.PATH_PREFIX or ''
 if urls_prefix:
@@ -30,6 +26,8 @@ def home(request):
 
 app_urls = [
     re_path(urls_prefix + 'admin/', admin.site.urls),
+    path('oauth/', include('social_django.urls', namespace='social')),
+    path('logout', LogoutView.as_view(next_page='/'), name='logout'),
     re_path(urls_prefix, include('sample_app.urls')),
 ]
 

@@ -1,0 +1,24 @@
+{
+  "auth": {
+    "fb": {
+      "key": "xx",
+      "secret": "xx"
+    },
+    "twitter": {
+      "key": "xx.apps.googleusercontent.com",
+      "secret": "xx"
+    },
+    "github": {
+      "key": "xx.apps.googleusercontent.com",
+      "secret": "xx"
+    },
+    "live": {
+      "key": "xx.apps.googleusercontent.com",
+      "secret": "xx"
+    },
+    "linkedin": {
+      "key": "xx.apps.googleusercontent.com",
+      "secret": "xx"
+    }
+  }
+}

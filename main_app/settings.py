@@ -1,3 +1,4 @@
+from os.path import exists
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -89,8 +90,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 ALLOW_UNICODE_SLUGS = True
 
 import os
+import json
 
-my_apps = ['sam_tools', 'initsql', 'sample_app']
+my_apps = ['sam_tools', 'initsql', 'sample_app', 'social_django']
 INSTALLED_APPS = my_apps + INSTALLED_APPS
 
 PATH_PREFIX = ''
@@ -106,3 +108,40 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 MEDIA_URL = slashed_path + 'media/'
 STATIC_URL = slashed_path + 'static/'
 AUTH_PASSWORD_VALIDATORS = []
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
+    # 'social_core.backends.twitter.TwitterOAuth',
+    # 'social_core.backends.linkedin.LinkedinOAuth2',
+    # 'social_core.backends.microsoft.MicrosoftOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+config_info = {}
+config_path = str(BASE_DIR)+'/config.json'
+if exists(config_path):
+    with open(config_path, 'r') as site_config:
+        config_info = json.load(site_config)
+
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config_info['auth']['google']['key']
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config_info['auth']['google']['secret']
+
+SOCIAL_AUTH_FACEBOOK_KEY = config_info['auth']['fb']['key']
+SOCIAL_AUTH_FACEBOOK_SECRET = config_info['auth']['fb']['secret']
+
+# SOCIAL_AUTH_TWITTER_KEY = 'your-twitter-api-key'
+# SOCIAL_AUTH_TWITTER_SECRET = 'your-twitter-api-secret'
+#
+#
+# SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = 'your-linkedin-client-id'
+# SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = 'your-linkedin-client-secret'
+#
+#
+# SOCIAL_AUTH_MICROSOFT_KEY = 'your-microsoft-client-id'
+# SOCIAL_AUTH_MICROSOFT_SECRET = 'your-microsoft-client-secret'
