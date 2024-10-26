@@ -1,51 +1,65 @@
 import json
+
 from django.urls import path
 from django.shortcuts import render
-from social_core.backends.oauth import BaseOAuth2
-from social_core.exceptions import AuthMissingParameter
-from social_core.utils import handle_http_errors, parse_qs
+from social_core.pipeline import social_auth
 
 
-class FaceBookOath2(BaseOAuth2):
-    @handle_http_errors
-    def auth_complete(self, *args, **kwargs):
-        """Completes login process, must return user instance"""
-        self.process_error(self.data)
-        if not self.data.get("code"):
-            raise AuthMissingParameter(self, "code")
-        state = self.validate_state()
-        key, secret = self.get_key_and_secret()
-        params = {
-            "client_id": key,
-            "redirect_uri": self.get_redirect_uri(state),
-            "client_secret": secret,
-            "code": self.data["code"],
-        }
-        try:
-            response = self.request(self.access_token_url(), 'POST', params=params)
-        except Exception as ex:
-            er = ex.response
-            err = json.loads(er.text)['error']
-            b = 1
-            raise Exception(err)
-        try:
-            response = response.json()
-        except ValueError:
-            response = parse_qs(response.text)
-        access_token = response["access_token"]
-        return self.do_auth(access_token, response, *args, **kwargs)
+def load_extra_data(backend, details, response, uid, user, *args, **kwargs):
+    social = kwargs.get("social") or backend.strategy.storage.user.get_social_auth(
+        backend.name, uid
+    )
+    if social:
+        extra_data = backend.extra_data(user, uid, response, details, *args, **kwargs)
+        del_keys = []
+        for key in details:
+            extra_data[key] = details[key]
+        for key in extra_data:
+            if key in ['access_token', 'token_type', 'expires', 'expires_in']:
+                del_keys.append(key)
+        for key in del_keys:
+            del extra_data[key]
+        for key in response:
+            if key in ['name', 'fullname', 'email', 'picture']:
+                actual_val = response[key]
+                str_val = str(actual_val)
+                extra_data[key] = str_val
+        if not extra_data.get('name'):
+            extra_data['name'] = user.username
+        if not extra_data.get('email'):
+            extra_data['email'] = ''
+        if not extra_data.get('picture'):
+            extra_data['picture'] = ''
+        if extra_data.get('fullname'):
+            if not extra_data.get('name'):
+                extra_data['name'] = extra_data['fullname']
+                del extra_data['fullname']
+        if not extra_data.get('name'):
+            if extra_data.get('last_name'):
+                extra_data['name'] = ' '.join([extra_data['first_name'], extra_data['last_name']])
+            del extra_data['first_name']
+            del extra_data['last_name']
+        social.set_extra_data(extra_data)
 
-# social_core.backends.facebook.FacebookOAuth2.auth_complete = FaceBookOath2.auth_complete
+social_auth.load_extra_data = load_extra_data
 
 def hello(request):
-    profile_picture = None
+    user_info = {
+        'name': 'Private',
+        'email': 'Private',
+        'picture': 'https://www.htgtrading.co.uk/wp-content/uploads/2016/03/no-user-image-square.jpg',
+    }
     if request.user.is_authenticated:
-        social_account = request.user.social_auth.filter(provider='google-oauth2').first()
+        social_account = request.user.social_auth.filter().first()
         if social_account:
-            profile_picture = social_account.extra_data.get('picture')
+            if social_account.extra_data:
+                user_data = social_account.extra_data
+                for key in user_data:
+                    if user_data[key]:
+                        user_info[key] = user_data[key]
 
     return render(request, 'sample_app/index.html', {
-        'profile_picture': profile_picture,
+        'user_info': user_info,
         'page': 'Home Page'
     })
 

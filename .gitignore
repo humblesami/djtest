@@ -4,8 +4,10 @@
 db.sql*
 *.pyc
 __pycache__
-/.vscode
+.vscode
 /uploaded_files
 config.json
 node_modules
 static/build
+/social_core
+/social_django

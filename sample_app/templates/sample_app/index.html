@@ -2,20 +2,19 @@
 <head>
 </head>
 <body>
-<div class="navbar">
+<div class="navbar" style="display:flex; justify-content: flex-end">
     <div class="navbar-right">
         {% if user.is_authenticated %}
             <div class="user-info">
-                {% if profile_picture %}
-                    <img src="{{ profile_picture }}" alt="Profile Picture" width="30" height="30">
-                {% endif %}
-                <span>{{ user.username }}</span> |
-                <span>{{ user.email }}</span>
+                <img src="{{ user_info.picture }}" alt="Profile Picture" width="30" height="30">
+                <span>{{ user_info.name }}</span> | <span>{{ user_info.email }}</span>
                 <a href="/logout">Logout</a>
+                {% if user.is_staff %}
                 <a href="/admin">Admin</a>
+                {% endif %}
             </div>
         {% else %}
-            <a href="/auth/login">Login</a>
+            <a href="">Guest User</a>
         {% endif %}
     </div>
 </div>
