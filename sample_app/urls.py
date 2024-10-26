@@ -5,7 +5,7 @@ from django.urls import path
 from django.shortcuts import render
 from social_core.pipeline import social_auth
 
-def process_profile_info(extra_data, details, response):
+def process_profile_info(extra_data, details, response, username):
     del_keys = []
     for key in details:
         extra_data[key] = details[key]
@@ -20,7 +20,7 @@ def process_profile_info(extra_data, details, response):
             str_val = str(actual_val)
             extra_data[key] = str_val
     if not extra_data.get('name'):
-        extra_data['name'] = user.username
+        extra_data['name'] = username
     if not extra_data.get('email'):
         extra_data['email'] = ''
     if not extra_data.get('picture'):
@@ -48,7 +48,7 @@ def load_extra_data(backend, details, response, uid, user, *args, **kwargs):
     )
     if social:
         extra_data = backend.extra_data(user, uid, response, details, *args, **kwargs)
-        extra_data = process_profile_info(extra_data, details, response)
+        extra_data = process_profile_info(extra_data, details, response, user.username)
         social.set_extra_data(extra_data)
 
 social_auth.load_extra_data = load_extra_data
