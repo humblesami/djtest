@@ -26,7 +26,7 @@ def home(request):
 
 app_urls = [
     re_path(urls_prefix + 'admin/', admin.site.urls),
-    path('oauth/', include('social_django.urls', namespace='social')),
+    # path('oauth/', include('social_django.urls', namespace='social')),
     path('logout', LogoutView.as_view(next_page='/'), name='logout'),
     re_path(urls_prefix, include('sample_app.urls')),
 ]

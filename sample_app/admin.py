@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Model1
-from sam_tools.dj import DjangoUtils
+from sam_tools.utils import DjangoUtils
 
 
 class Model1Admin(admin.ModelAdmin):

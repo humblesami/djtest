@@ -92,7 +92,7 @@ ALLOW_UNICODE_SLUGS = True
 import os
 import json
 
-my_apps = ['sam_tools', 'initsql', 'sample_app', 'social_django']
+my_apps = ['sam_tools', 'initsql', 'sample_app']
 INSTALLED_APPS = my_apps + INSTALLED_APPS
 
 PATH_PREFIX = ''
