@@ -1,5 +1,5 @@
 (function(){
-    let elForm = document.querySelector('form[action="/accounts/login/"]');
+    let elForm = document.querySelector('.page-content form');
     let ii = 0;
     while(elForm && ii<10){
         if(elForm.nextElementSibling && elForm.nextElementSibling.innerHTML.trim() == 'Or use a third-party'){
