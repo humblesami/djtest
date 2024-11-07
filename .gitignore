@@ -11,3 +11,4 @@ node_modules
 static/build
 /social_core
 /social_django
+allauth

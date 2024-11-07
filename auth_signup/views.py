@@ -1,12 +1,23 @@
 from django.views.generic.base import TemplateView
 from allauth.account import app_settings
 from allauth.account.adapter import get_adapter
+from allauth.socialaccount import views as social_views
+from allauth.account import views as account_views
 from allauth.account.mixins import (
     LogoutFunctionalityMixin,
     NextRedirectMixin,
     _ajax_response,
 )
 from allauth.core.internal.httpkit import redirect
+from auth_signup.forms import SocialSignupForm, AcccountSignupForm
+
+
+class SocialSignupView(social_views.SignupView):
+    form_class = SocialSignupForm
+
+
+class AccountSignupView(account_views.SignupView):
+    form_class = AcccountSignupForm
 
 
 class LogoutView(NextRedirectMixin, LogoutFunctionalityMixin, TemplateView):
@@ -21,3 +32,5 @@ class LogoutView(NextRedirectMixin, LogoutFunctionalityMixin, TemplateView):
         return _ajax_response(self.request, response)
 
 logout = LogoutView.as_view()
+social_views.signup = SocialSignupView.as_view()
+account_views.signup = AccountSignupView.as_view()
