@@ -8,9 +8,4 @@ class AuthSignupConfig(AppConfig):
     name = 'auth_signup'
 
     def ready(self):
-        custom_settings = {
-            # 'SOCIALACCOUNT_PROVIDERS': SOCIALACCOUNT_PROVIDERS,
-        }
-        for setting, value in custom_settings.items():
-            if not hasattr(settings, setting):
-                setattr(settings, setting, value)
+        pass

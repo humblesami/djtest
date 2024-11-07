@@ -148,8 +148,7 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-    "allauth.mfa",
-    'demo'
+    "allauth.mfa"
 ]
 
 USE_TZ = True
@@ -164,7 +163,6 @@ AUTH_PASSWORD_VALIDATORS = [{
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 
-
 MFA_PASSKEY_LOGIN_ENABLED = True
 MFA_PASSKEY_SIGNUP_ENABLED = True
 MFA_SUPPORTED_TYPES = ["webauthn", "totp", "recovery_codes",]
@@ -173,6 +171,8 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_LOGIN_BY_CODE_ENABLED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_EMAIL_VERIFICATION_BY_CODE_ENABLED = True
+SOCIALACCOUNT_PROVIDERS = {}
+
 
 def read_social_apps_credentials():
     config_path = str(BASE_DIR) + '/config.json'
@@ -185,8 +185,9 @@ def read_social_apps_credentials():
             social_auth_cred = config_info.get('social_auth')
             return social_auth_cred
     except:
-        print('\nError in reading '+config_path)
+        print('\nError in reading ' + config_path)
         return {}
+
 
 def add_social_provider_apps():
     provider_candidates = {
@@ -310,6 +311,5 @@ def add_social_provider_apps():
         SOCIALACCOUNT_PROVIDERS[social_provider] = provider_candidates[social_provider]
         INSTALLED_APPS.append("allauth.socialaccount.providers." + social_provider)
 
-SOCIALACCOUNT_PROVIDERS = {}
 add_social_provider_apps()
 INSTALLED_APPS.append("allauth.usersessions")
