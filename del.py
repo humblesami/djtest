@@ -45,7 +45,7 @@ def remove_migrations():
     if path.exists('db.sqlite3'):
         os.remove('db.sqlite3')
 
-# remove_migrations()
+remove_migrations()
 remove_folders('tests')
 remove_files('tests.py')
 remove_file_by_extension('pyc')

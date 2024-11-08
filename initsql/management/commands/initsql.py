@@ -23,7 +23,7 @@ class Command(BaseCommand):
 
         db_engine = database_info['ENGINE']
         if db_engine.endswith('sqlite3'):
-            db_path = root_path + '/db.sqlite3'
+            db_path = root_path + '/db/au_sample.db'
             if os.path.exists(db_path):
                 os.remove(db_path)
         importlib.import_module('del')

@@ -19,9 +19,7 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",  # Add 'postgresql_psycopg2', 'postgresql',
         # 'mysql', 'sqlite3' or 'oracle'.
-        "NAME": os.environ.get(
-            "DATABASE_NAME", os.path.join(BASE_DIR , "db" , "au_sample.db")
-        )
+        "NAME": str(BASE_DIR) + '/db/au_sample.db',
     }
 }
 
@@ -166,13 +164,12 @@ DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 MFA_PASSKEY_LOGIN_ENABLED = True
 MFA_PASSKEY_SIGNUP_ENABLED = True
 MFA_SUPPORTED_TYPES = ["webauthn", "totp", "recovery_codes",]
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_LOGIN_BY_CODE_ENABLED = True
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION_BY_CODE_ENABLED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SOCIALACCOUNT_PROVIDERS = {}
-
 
 def read_social_apps_credentials():
     config_path = str(BASE_DIR) + '/config.json'
@@ -187,7 +184,6 @@ def read_social_apps_credentials():
     except:
         print('\nError in reading ' + config_path)
         return {}
-
 
 def add_social_provider_apps():
     provider_candidates = {
